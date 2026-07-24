@@ -89,16 +89,16 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         </div>
 
         <div className="fixed inset-x-0 bottom-0 z-40 md:hidden px-4 py-3 bg-mist-950">
-          <div className="relative mx-auto flex w-fit gap-8 items-center justify-between rounded-full border border-mist-800 bg-mist-900/95 px-2 py-2 shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.8)]">
+          <div className="relative mx-auto flex w-fit gap-4 items-center justify-between rounded-full border border-mist-800 bg-mist-900/95 px-2 py-2 shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.8)]">
             <div
-              className={`absolute top-2 h-10 w-10 rounded-full bg-linear-to-br from-mist-500/80 to-cyan-400/80 shadow-lg shadow-blue-500/20 transition-all duration-300 ease-out ${
-                activeView === 'dashboard' ? 'left-2' : 'left-[calc(100%-48px)]'
+              className={`absolute top-2 h-10 w-14 rounded-full bg-linear-to-br from-mist-500/80 to-cyan-400/80 shadow-lg shadow-blue-500/20 transition-all duration-300 ease-out ${
+                activeView === 'dashboard' ? 'left-2' : 'left-[calc(100%-64px)]'
               }`}
             />
             <button
               type="button"
               onClick={() => setActiveView('dashboard')}
-              className={`relative z-10 flex h-10 w-10 items-center justify-center rounded-full text-xs transition-colors duration-300 ${
+              className={`relative z-10 flex h-10 w-14 items-center justify-center rounded-full text-xs transition-colors duration-300 ${
                 activeView === 'dashboard' ? 'text-white' : 'text-mist-300'
               }`}
             >
@@ -107,7 +107,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             <button
               type="button"
               onClick={() => setActiveView('tasks')}
-              className={`relative z-10 flex h-10 w-10 items-center justify-center rounded-full text-xs transition-colors duration-300 ${
+              className={`relative z-10 flex h-10 w-14 items-center justify-center rounded-full text-xs transition-colors duration-300 ${
                 activeView === 'tasks' ? 'text-white' : 'text-mist-300'
               }`}
             >
