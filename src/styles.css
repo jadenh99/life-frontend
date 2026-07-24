@@ -1,0 +1,17 @@
+@import 'tailwindcss';
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  min-height: 100vh;
+  background-color: var(--color-dark);
+  color: white;
+}
+
+body {
+  margin: 0;
+}
