@@ -190,7 +190,7 @@ function Tasks() {
           {tasks.map((task) => (
             <li key={task.id}>
               <div
-                className="border px-4 py-4 border-mist-800 justify-between clamp w-1/2 grid grid-cols-3 grid-cols-[1fr, min-content, 1fr]
+                className="border px-4 py-4 border-mist-800 justify-between clamp w-full md:w-1/2 grid grid-cols-3 grid-cols-[1fr, min-content, 1fr]
                 group hover:bg-mist-800 transition-all duration-200 cursor-pointer rounded-md bg-mist-900 align-middle items-center"
               >
                 <div>
