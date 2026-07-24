@@ -1,14 +1,12 @@
-import {
-  HeadContent,
-  Link,
-  Scripts,
-  createRootRoute,
-} from '@tanstack/react-router'
+import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
+import { useState } from 'react'
 
 import appCss from '../styles.css?url'
 import { Sprout, LayoutDashboard, SquareCheckBig } from 'lucide-react'
+import { Home } from './index'
+import { Tasks } from './tasks'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -35,6 +33,10 @@ export const Route = createRootRoute({
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const [activeView, setActiveView] = useState<'dashboard' | 'tasks'>(
+    'dashboard',
+  )
+
   return (
     <html lang="en" className="bg-mist-950">
       <head>
@@ -49,39 +51,68 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               </span>
               Life
             </h2>
-            <h2 className="flex items-center gap-2 px-2 py-1 hover:bg-mist-500 transition-all duration-200 cursor-pointer rounded-sm">
+            <button
+              type="button"
+              onClick={() => setActiveView('dashboard')}
+              className={`flex items-center gap-2 px-2 py-1 rounded-sm text-left transition-all duration-200 ${
+                activeView === 'dashboard'
+                  ? 'bg-mist-700 text-white'
+                  : 'text-mist-300 hover:bg-mist-500'
+              }`}
+            >
               <span>
                 <LayoutDashboard size={16} />
               </span>
-              <Link to="/">Dashboard</Link>
-            </h2>
-            <h2 className="flex items-center gap-2 px-2 py-1 hover:bg-mist-500 transition-all duration-200 cursor-pointer rounded-sm">
+              Dashboard
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveView('tasks')}
+              className={`flex items-center gap-2 px-2 py-1 rounded-sm text-left transition-all duration-200 ${
+                activeView === 'tasks'
+                  ? 'bg-mist-700 text-white'
+                  : 'text-mist-300 hover:bg-mist-500'
+              }`}
+            >
               <span>
                 <SquareCheckBig size={16} />
               </span>
-              <Link to="/tasks">Tasks</Link>
-            </h2>
+              Tasks
+            </button>
           </nav>
 
-          {children}
+          <div className="flex-1 overflow-auto transition-all duration-300 ease-out">
+            <div className="h-full transition-all duration-300 ease-out">
+              {activeView === 'dashboard' ? <Home /> : <Tasks />}
+            </div>
+          </div>
         </div>
 
         <div className="fixed inset-x-0 bottom-0 z-40 md:hidden px-4 py-3 bg-mist-950">
-          <div className="mx-auto flex w-fit gap-8 px-8 max-w-lg items-center justify-around rounded-full border border-mist-800 bg-mist-900/95 py-3 shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.8)]">
-            <Link
-              to="/"
-              className="flex flex-col items-center gap-1 rounded-3xl text-xs text-mist-300 transition hover:bg-mist-800/70"
+          <div className="relative mx-auto flex w-fit gap-8 items-center justify-between rounded-full border border-mist-800 bg-mist-900/95 px-2 py-2 shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.8)]">
+            <div
+              className={`absolute top-2 h-10 w-10 rounded-full bg-linear-to-br from-mist-500/80 to-cyan-400/80 shadow-lg shadow-blue-500/20 transition-all duration-300 ease-out ${
+                activeView === 'dashboard' ? 'left-2' : 'left-[calc(100%-48px)]'
+              }`}
+            />
+            <button
+              type="button"
+              onClick={() => setActiveView('dashboard')}
+              className={`relative z-10 flex h-10 w-10 items-center justify-center rounded-full text-xs transition-colors duration-300 ${
+                activeView === 'dashboard' ? 'text-white' : 'text-mist-300'
+              }`}
             >
-              <LayoutDashboard size={16} />
-              <span>Dashboard</span>
-            </Link>
-            <Link
-              to="/tasks"
-              className="flex flex-col items-center gap-1 rounded-3xl text-xs text-mist-300 transition hover:bg-mist-800/70"
+              <LayoutDashboard size={18} />
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveView('tasks')}
+              className={`relative z-10 flex h-10 w-10 items-center justify-center rounded-full text-xs transition-colors duration-300 ${
+                activeView === 'tasks' ? 'text-white' : 'text-mist-300'
+              }`}
             >
-              <SquareCheckBig size={16} />
-              <span>Tasks</span>
-            </Link>
+              <SquareCheckBig size={18} />
+            </button>
           </div>
         </div>
 

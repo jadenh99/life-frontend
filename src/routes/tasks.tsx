@@ -6,7 +6,7 @@ import { Check, Plus, X } from 'lucide-react'
 
 export const Route = createFileRoute('/tasks')({ component: Tasks })
 
-function Tasks() {
+export function Tasks() {
   const [tasks, setTasks] = useState<Task[]>([])
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
