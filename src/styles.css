@@ -8,7 +8,6 @@ html,
 body,
 #app {
   min-height: 100vh;
-  background-color: var(--color-dark);
   color: white;
 }
 
