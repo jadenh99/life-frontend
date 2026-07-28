@@ -1,7 +1,7 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import appCss from '../styles.css?url'
 import { Sprout, LayoutDashboard, SquareCheckBig } from 'lucide-react'
@@ -21,11 +21,19 @@ export const Route = createRootRoute({
       {
         title: 'Life Organiser',
       },
+      {
+        name: 'theme-color',
+        content: '#0f172a',
+      },
     ],
     links: [
       {
         rel: 'stylesheet',
         href: appCss,
+      },
+      {
+        rel: 'manifest',
+        href: '/manifest.json',
       },
     ],
   }),
@@ -36,6 +44,16 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   const [activeView, setActiveView] = useState<'dashboard' | 'tasks'>(
     'dashboard',
   )
+
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch((error) => {
+          console.error('Service worker registration failed:', error)
+        })
+      })
+    }
+  }, [])
 
   return (
     <html lang="en" className="bg-mist-950">
