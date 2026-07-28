@@ -1,7 +1,7 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import appCss from '../styles.css?url'
 import { Sprout, LayoutDashboard, SquareCheckBig } from 'lucide-react'
@@ -21,19 +21,11 @@ export const Route = createRootRoute({
       {
         title: 'Life Organiser',
       },
-      {
-        name: 'theme-color',
-        content: '#0f172a',
-      },
     ],
     links: [
       {
         rel: 'stylesheet',
         href: appCss,
-      },
-      {
-        rel: 'manifest',
-        href: '/manifest.json',
       },
     ],
   }),
@@ -44,16 +36,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   const [activeView, setActiveView] = useState<'dashboard' | 'tasks'>(
     'dashboard',
   )
-
-  useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch((error) => {
-          console.error('Service worker registration failed:', error)
-        })
-      })
-    }
-  }, [])
 
   return (
     <html lang="en" className="bg-mist-950">
@@ -106,17 +88,17 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           </div>
         </div>
 
-        <div className="fixed inset-x-0 bottom-0 z-40 md:hidden px-4 py-3 bg-mist-950">
-          <div className="relative mx-auto flex w-fit gap-8 items-center justify-between rounded-full border border-mist-800 bg-mist-900/95 px-2 py-2 shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.8)]">
+        <div className="fixed inset-x-0 bottom-4 z-40 md:hidden px-4 py-3 bg-mist-950">
+          <div className="relative mx-auto flex w-fit gap-4 items-center justify-between rounded-full border border-mist-800 bg-mist-900/95 px-2 py-2 shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.8)]">
             <div
-              className={`absolute top-2 h-10 w-10 rounded-full bg-linear-to-br from-mist-500/80 to-cyan-400/80 shadow-lg shadow-blue-500/20 transition-all duration-300 ease-out ${
-                activeView === 'dashboard' ? 'left-2' : 'left-[calc(100%-48px)]'
+              className={`absolute top-2 h-10 w-12 rounded-full bg-linear-to-br from-mist-500/80 to-cyan-400/80 shadow-lg shadow-blue-500/20 transition-all duration-300 ease-out ${
+                activeView === 'dashboard' ? 'left-2' : 'left-[calc(100%-56px)]'
               }`}
             />
             <button
               type="button"
               onClick={() => setActiveView('dashboard')}
-              className={`relative z-10 flex h-10 w-10 items-center justify-center rounded-full text-xs transition-colors duration-300 ${
+              className={`relative z-10 flex h-10 w-12 items-center justify-center rounded-full text-xs transition-colors duration-300 ${
                 activeView === 'dashboard' ? 'text-white' : 'text-mist-300'
               }`}
             >
@@ -125,7 +107,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             <button
               type="button"
               onClick={() => setActiveView('tasks')}
-              className={`relative z-10 flex h-10 w-10 items-center justify-center rounded-full text-xs transition-colors duration-300 ${
+              className={`relative z-10 flex h-10 w-12 items-center justify-center rounded-full text-xs transition-colors duration-300 ${
                 activeView === 'tasks' ? 'text-white' : 'text-mist-300'
               }`}
             >

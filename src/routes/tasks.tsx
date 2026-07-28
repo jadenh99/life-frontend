@@ -146,23 +146,6 @@ export function Tasks() {
     })
   }
 
-  const skeletonTasks = Array.from({ length: 5 }, () => (
-    <div className="mx-auto w-full max-w-sm rounded-md border border-blue-300 p-4">
-      <div className="flex animate-pulse space-x-4">
-        <div className="flex-1 space-y-6 py-1">
-          <div className="h-2 rounded bg-gray-200"></div>
-          <div className="space-y-3">
-            <div className="grid grid-cols-3 gap-4">
-              <div className="col-span-2 h-2 rounded bg-gray-200"></div>
-              <div className="col-span-1 h-2 rounded bg-gray-200"></div>
-            </div>
-            <div className="h-2 rounded bg-gray-200"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  ))
-
   return (
     <div className="bg-mist-950 p-8">
       <span className="opacity-80">{getDateString()}</span>
@@ -190,10 +173,10 @@ export function Tasks() {
           {tasks.map((task) => (
             <li key={task.id}>
               <div
-                className="border px-4 py-4 border-mist-800 justify-between clamp w-full md:w-1/2 grid grid-cols-3 grid-cols-[1fr, min-content, 1fr]
+                className="border px-4 py-4 border-mist-800 justify-between clamp w-full md:w-1/2 grid grid-cols-1 grid-rows-2 md:grid-cols-3 md:grid-cols-[1fr, min-content, 1fr]
                 group hover:bg-mist-800 transition-all duration-200 cursor-pointer rounded-md bg-mist-900 align-middle items-center"
               >
-                <div>
+                <div className="row-start-1">
                   <h2 className="self-center">{task.title}</h2>
                   {task.dueDate ? (
                     <p className="mt-1 text-sm text-gray-400">
@@ -203,7 +186,7 @@ export function Tasks() {
                 </div>
                 {task.priority ? (
                   <span
-                    className={`rounded-full px-2.5 py-1 text-xs font-medium capitalize h-min w-min justify-self-end ${
+                    className={`row-start-1 rounded-full px-2.5 py-1 text-xs font-medium capitalize h-min w-min justify-self-end ${
                       task.priority === 'high'
                         ? 'bg-red-500/15 text-red-300'
                         : task.priority === 'medium'
