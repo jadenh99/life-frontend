@@ -16,6 +16,8 @@
     "check": "prettier --check ."
   },
   "dependencies": {
+    "@emnapi/core": "2.0.0-alpha.3",
+    "@emnapi/runtime": "2.0.0-alpha.3",
     "@tailwindcss/vite": "^4.3.2",
     "@tanstack/react-devtools": "latest",
     "@tanstack/react-router": "latest",
