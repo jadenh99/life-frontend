@@ -3,36 +3,25 @@ import { useEffect, useState, type FormEvent } from 'react'
 import { type Task } from '../types/task'
 import { getDateString, getTimeOfDay } from '#/util/dateUtil'
 import { Check, Plus, X } from 'lucide-react'
+import { useTasksContext } from '../context/TasksContext'
 
 export const Route = createFileRoute('/tasks')({ component: Tasks })
 
 export function Tasks() {
-  const [tasks, setTasks] = useState<Task[]>([])
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const {
+    tasks,
+    setTasks,
+    isLoading,
+    errorMessage: contextErrorMessage,
+    setErrorMessage,
+    refreshTasks,
+  } = useTasksContext()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
 
-  const [isLoading, setIsLoading] = useState(true)
-
   useEffect(() => {
-    getTasks()
-  }, [])
-
-  async function getTasks() {
-    const response = await fetch(
-      'https://i17moo3023.execute-api.ap-southeast-2.amazonaws.com/tasks',
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    )
-
-    const data = await response.json()
-    setTasks(Array.isArray(data?.data) ? data.data : [])
-    setIsLoading(false)
-  }
+    void refreshTasks()
+  }, [refreshTasks])
 
   async function addTask(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -150,8 +139,8 @@ export function Tasks() {
     <div className="bg-mist-950 p-8">
       <span className="opacity-80">{getDateString()}</span>
       <h1 className="text-4xl font-bold">Good {getTimeOfDay()}, Jaden</h1>
-      {errorMessage ? (
-        <p className="mt-2 text-sm text-red-400">{errorMessage}</p>
+      {contextErrorMessage ? (
+        <p className="mt-2 text-sm text-red-400">{contextErrorMessage}</p>
       ) : null}
 
       <div className="mt-4 mb-8 flex items-center justify-between">
