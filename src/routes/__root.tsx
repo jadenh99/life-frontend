@@ -97,7 +97,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             </div>
           </div>
 
-          <div className="fixed inset-x-0 bottom-4 z-40 md:hidden px-4 py-3 bg-mist-950">
+          <div className="fixed inset-x-0 bottom-4 z-40 md:hidden px-4 py-3">
             <div
               className={`relative mx-auto flex w-fit gap-4 items-center justify-between rounded-full border border-mist-800 bg-mist-900/95 px-2 py-2 shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.8)] transition-transform duration-200 ${
                 isPulsing ? 'scale-[1.05]' : 'scale-100'
