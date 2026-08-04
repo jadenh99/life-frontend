@@ -1,5 +1,9 @@
 import { useTasksContext } from '#/context/TasksContext'
-import { getDateString, getTimeOfDay } from '#/util/dateUtil'
+import {
+  formatDueDateForDisplay,
+  getDateString,
+  getTimeOfDay,
+} from '#/util/dateUtil'
 import { getUpcomingTasksSummary } from '#/util/upcomingTasks'
 import { useMemo } from 'react'
 
@@ -11,16 +15,9 @@ export function Home() {
     [tasks],
   )
 
-  const soonestTaskDate = upcomingTasksSummary.soonestTask?.dueDate
-    ? new Date(upcomingTasksSummary.soonestTask.dueDate).toLocaleDateString(
-        'en-AU',
-        {
-          weekday: 'short',
-          day: 'numeric',
-          month: 'short',
-        },
-      )
-    : null
+  const soonestTaskDate = formatDueDateForDisplay(
+    upcomingTasksSummary.soonestTask?.dueDate,
+  )
 
   return (
     <div className="p-8">
@@ -28,22 +25,19 @@ export function Home() {
       <h1 className="text-4xl font-bold">Good {getTimeOfDay()}, Jaden</h1>
       <div className="mt-8">
         {upcomingTasksSummary.count > 0 ? (
-          <>
-            <p className="text-lg text-mist-100">
-              You have {upcomingTasksSummary.count} tasks due within the next 7
-              days, take a look at your tasks
-            </p>
-            {upcomingTasksSummary.soonestTask ? (
-              <p className="mt-2 text-sm text-mist-300">
-                Soonest task: {upcomingTasksSummary.soonestTask.title} —{' '}
-                {soonestTaskDate}
-              </p>
-            ) : null}
-          </>
-        ) : (
           <p className="text-lg text-mist-100">
-            There are no tasks due within the next 7 days.
+            You have {upcomingTasksSummary.count}{' '}
+            {upcomingTasksSummary.count === 1 ? 'task' : 'tasks'} due within the
+            next 7 days, take a look.
           </p>
+        ) : null}
+        {upcomingTasksSummary.soonestTask ? (
+          <p className="mt-2 text-sm text-mist-300">
+            Soonest task: {upcomingTasksSummary.soonestTask.title} —{' '}
+            {soonestTaskDate}
+          </p>
+        ) : (
+          <p>no task!</p>
         )}
       </div>
     </div>

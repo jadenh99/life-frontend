@@ -1,13 +1,14 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import appCss from '../styles.css?url'
-import { Sprout, LayoutDashboard, SquareCheckBig } from 'lucide-react'
+import { Sprout, House, SquareCheckBig } from 'lucide-react'
 import { Home } from '../pages/index.page'
 import { Tasks } from '../pages/tasks.page'
 import { TasksProvider } from '../context/TasksContext'
+import { registerServiceWorker } from '../util/serviceWorker'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -39,10 +40,18 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   )
   const [isPulsing, setIsPulsing] = useState(false)
 
+  useEffect(() => {
+    void registerServiceWorker()
+  }, [])
+
   function handleNavClick(view: 'dashboard' | 'tasks') {
+    if (activeView === view) {
+      return
+    }
+
     setActiveView(view)
     setIsPulsing(true)
-    window.setTimeout(() => setIsPulsing(false), 180)
+    window.setTimeout(() => setIsPulsing(false), 220)
   }
 
   return (
@@ -62,25 +71,27 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               </h2>
               <button
                 type="button"
-                onClick={() => setActiveView('dashboard')}
+                onClick={() => handleNavClick('dashboard')}
+                aria-current={activeView === 'dashboard' ? 'page' : undefined}
                 className={`flex items-center gap-2 px-2 py-1 rounded-sm text-left transition-all duration-200 ${
                   activeView === 'dashboard'
-                    ? 'bg-mist-700 text-white'
-                    : 'text-mist-300 hover:bg-mist-500'
+                    ? 'bg-mist-700 text-white shadow-sm scale-[1.01]'
+                    : 'text-mist-300 hover:bg-mist-500 hover:text-white'
                 }`}
               >
                 <span>
-                  <LayoutDashboard size={16} />
+                  <House size={16} />
                 </span>
                 Dashboard
               </button>
               <button
                 type="button"
-                onClick={() => setActiveView('tasks')}
+                onClick={() => handleNavClick('tasks')}
+                aria-current={activeView === 'tasks' ? 'page' : undefined}
                 className={`flex items-center gap-2 px-2 py-1 rounded-sm text-left transition-all duration-200 ${
                   activeView === 'tasks'
-                    ? 'bg-mist-700 text-white'
-                    : 'text-mist-300 hover:bg-mist-500'
+                    ? 'bg-mist-700 text-white shadow-sm scale-[1.01]'
+                    : 'text-mist-300 hover:bg-mist-500 hover:text-white'
                 }`}
               >
                 <span>
@@ -90,40 +101,63 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               </button>
             </nav>
 
-            <div className="flex-1 overflow-auto transition-all duration-300 ease-out">
-              <div className="h-full transition-all duration-300 ease-out">
-                {activeView === 'dashboard' ? <Home /> : <Tasks />}
+            <div className="flex-1 overflow-hidden transition-all duration-300 ease-out">
+              <div className="relative h-full overflow-hidden">
+                <div
+                  className={`absolute inset-0 h-full overflow-auto transition-all duration-300 ease-out ${
+                    activeView === 'dashboard'
+                      ? 'translate-x-0 opacity-100 pointer-events-auto'
+                      : '-translate-x-4 opacity-0 pointer-events-none'
+                  }`}
+                >
+                  <Home />
+                </div>
+                <div
+                  className={`absolute inset-0 h-full overflow-auto transition-all duration-300 ease-out ${
+                    activeView === 'tasks'
+                      ? 'translate-x-0 opacity-100 pointer-events-auto'
+                      : 'translate-x-4 opacity-0 pointer-events-none'
+                  }`}
+                >
+                  <Tasks />
+                </div>
               </div>
             </div>
           </div>
 
           <div className="fixed inset-x-0 bottom-10 z-40 md:hidden px-4 py-3">
             <div
-              className={`relative mx-auto flex w-fit gap-4 items-center justify-between rounded-full border border-mist-800 bg-mist-900/95 px-2 py-2 shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.8)] transition-transform duration-200 ${
-                isPulsing ? 'scale-[1.05]' : 'scale-100'
+              className={`relative mx-auto flex w-fit gap-4 items-center justify-between rounded-full border border-mist-800 bg-mist-900/95 px-2 py-2 shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.8)] transition-all duration-220 ${
+                isPulsing
+                  ? 'scale-[1.03] shadow-[0_-10px_40px_-10px_rgba(34,211,238,0.25)]'
+                  : 'scale-100'
               }`}
             >
               <div
-                className={`absolute top-2 h-10 w-12 rounded-full bg-linear-to-br from-mist-500/80 to-cyan-400/80 shadow-lg shadow-blue-500/20 transition-all duration-300 ease-out ${
+                className={`absolute top-2 h-10 w-14 rounded-full bg-linear-to-br from-mist-500/80 to-cyan-400/80 shadow-lg shadow-blue-500/20 transition-all duration-300 ease-out ${
                   activeView === 'dashboard'
                     ? 'left-2'
-                    : 'left-[calc(100%-56px)]'
+                    : 'left-[calc(100%-64px)]'
                 }`}
               />
               <button
                 type="button"
                 onClick={() => handleNavClick('dashboard')}
-                className={`relative z-10 flex h-10 w-12 items-center justify-center rounded-full text-xs transition-colors duration-300 ${
-                  activeView === 'dashboard' ? 'text-white' : 'text-mist-300'
+                className={`relative z-10 flex h-10 w-14 items-center justify-center rounded-full text-xs transition-all duration-300 ${
+                  activeView === 'dashboard'
+                    ? 'text-white scale-105'
+                    : 'text-mist-300 hover:text-white'
                 }`}
               >
-                <LayoutDashboard size={18} />
+                <House size={18} />
               </button>
               <button
                 type="button"
                 onClick={() => handleNavClick('tasks')}
-                className={`relative z-10 flex h-10 w-12 items-center justify-center rounded-full text-xs transition-colors duration-300 ${
-                  activeView === 'tasks' ? 'text-white' : 'text-mist-300'
+                className={`relative z-10 flex h-10 w-14 items-center justify-center rounded-full text-xs transition-all duration-300 ${
+                  activeView === 'tasks'
+                    ? 'text-white scale-105'
+                    : 'text-mist-300 hover:text-white'
                 }`}
               >
                 <SquareCheckBig size={18} />

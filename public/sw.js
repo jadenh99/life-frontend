@@ -1,4 +1,4 @@
-const CACHE_NAME = 'life-organiser-cache-v1'
+const CACHE_NAME = 'life-organiser-cache-v3'
 const APP_SHELL_URLS = ['/', '/manifest.json']
 
 self.addEventListener('install', (event) => {
@@ -23,20 +23,47 @@ self.addEventListener('activate', (event) => {
   self.clients.claim()
 })
 
+self.addEventListener('message', (event) => {
+  if (event.data?.type === 'SKIP_WAITING') {
+    self.skipWaiting()
+  }
+})
+
 self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET') return
+  const { request } = event
+
+  if (request.method !== 'GET') return
+
+  let requestUrl
+  try {
+    requestUrl = new URL(request.url)
+  } catch {
+    return
+  }
+
+  const isCacheableRequest =
+    requestUrl.protocol === 'http:' || requestUrl.protocol === 'https:'
+
+  if (!isCacheableRequest) return
 
   event.respondWith(
-    fetch(event.request)
+    fetch(request)
       .then((response) => {
-        const copy = response.clone()
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy))
+        if (response.ok && response.type === 'basic') {
+          const copy = response.clone()
+          void caches.open(CACHE_NAME).then((cache) => {
+            try {
+              void cache.put(request, copy)
+            } catch {
+              // Ignore unsupported or invalid cache writes for this request.
+            }
+          })
+        }
+
         return response
       })
       .catch(() =>
-        caches
-          .match(event.request)
-          .then((cached) => cached || caches.match('/')),
+        caches.match(request).then((cached) => cached || caches.match('/')),
       ),
   )
 })

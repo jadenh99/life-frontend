@@ -60,6 +60,22 @@ describe('getUpcomingTasksSummary', () => {
     expect(summary.soonestTask?.title).toBe('Today task')
   })
 
+  it('keeps timezone-offset due dates on the correct calendar day', () => {
+    const now = new Date('2026-08-02T12:00:00.000Z')
+    const tasks: Task[] = [
+      createTask({
+        id: '1',
+        title: 'Timezone task',
+        dueDate: '2026-08-02T00:00:00.000+10:00',
+      }),
+    ]
+
+    const summary = getUpcomingTasksSummary(tasks, now)
+
+    expect(summary.count).toBe(1)
+    expect(summary.soonestTask?.title).toBe('Timezone task')
+  })
+
   it('returns no upcoming tasks when none are due soon', () => {
     const now = new Date('2026-07-31T12:00:00.000Z')
     const tasks: Task[] = [

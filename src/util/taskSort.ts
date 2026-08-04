@@ -1,3 +1,4 @@
+import { parseDueDate } from './dateUtil'
 import type { Task } from '../types/task'
 
 export type SortField = 'dueDate' | 'priority'
@@ -22,12 +23,10 @@ export function sortTasks(
       return direction === 'asc' ? comparison : -comparison
     }
 
-    const aDueDate = a.dueDate
-      ? new Date(a.dueDate).getTime()
-      : Number.POSITIVE_INFINITY
-    const bDueDate = b.dueDate
-      ? new Date(b.dueDate).getTime()
-      : Number.POSITIVE_INFINITY
+    const aDueDate =
+      parseDueDate(a.dueDate)?.getTime() ?? Number.POSITIVE_INFINITY
+    const bDueDate =
+      parseDueDate(b.dueDate)?.getTime() ?? Number.POSITIVE_INFINITY
     const comparison = aDueDate - bDueDate
     return direction === 'asc' ? comparison : -comparison
   })
